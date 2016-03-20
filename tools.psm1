@@ -1,42 +1,43 @@
-﻿function IIS {
-Param (
+﻿
+
+function IIS {
+  param (
     [validateset('test','set')]
     [string]$Action
   )
-switch ($Action)
+  switch ($Action)
   {
     'test' {
-        (get-windowsfeature -name Web-Server).installed
-      }
+      (get-windowsfeature -name Web-Server).installed
+    }
     'set' {
-        Add-WindowsFeature -Name Web-Server
-      }
+      Add-WindowsFeature -Name Web-Server
+    }
   }
 }
 
 function ASP {
-Param (
-    [validateset('test','set')]
-    [string]$Action
-  )
-switch ($Action)
-  {
-    'test' {
-        (get-windowsfeature -name Web-Asp-Net45).installed
-      }
-    'set' {
-        Add-WindowsFeature -Name Web-Asp-Net45
-      }
-  }
+  param (
+      [validateset('test','set')]
+      [string]$Action
+    )
+  switch ($Action) {
+      'test' {
+          (get-windowsfeature -name Web-Asp-Net45).installed
+        }
+      'set' {
+          Add-WindowsFeature -Name Web-Asp-Net45
+        }
+    }
 }
 
 function Zip {
-Param (
+  param (
     [validateset('test','set')]
     [string]$Action,
     [string]$Path = "$env:Systemdrive\inetpub\wwwroot"
   )
-$names = @(
+  $names = @(
     'App_Readme'
     'bin'
     'DataServices'
@@ -51,8 +52,7 @@ $names = @(
     'Web.config'
     'Web.Release.config'
   )
-switch ($Action)
-  {
+  switch ($Action) {
     'test' {
         $return = $names | foreach {
             Test-Path $Path\$_
@@ -67,56 +67,80 @@ switch ($Action)
 }
 
 function pkg {
-Param (
+  param (
     [validateset('test','set')]
     [string]$Action,
     [string]$path
   )
-switch ($Action)
-  {
+  switch ($Action) {
     'test' {
-        Test-Path -Path $path
-      }
+      Test-Path -Path $path
+    }
     'set' {
-        $null = New-Item -Path $path -ItemType Directory -Force 
-      }
+      $null = New-Item -Path $path -ItemType Directory -Force 
+    }
   }
 }
 
 function webconf {
-Param (
+  param (
     [validateset('test','set')]
     [string]$Action,
     [string]$Path =  "$env:SystemDrive\inetpub\wwwroot\Web.config",
     [string]$Conf
   )
-switch ($Action)
-  {
+  switch ($Action) {
     'test' {
-        $temp = $Path + ".tmp"
-        $Conf | Set-Content -Path $temp
-        $control = Get-Content $temp -Raw
-        Remove-Item -Path $temp -Force
-        if (Compare-Object -ReferenceObject $control -DifferenceObject (Get-Content $Path -Raw))
-          {
-            $false
-          }
-        else {$true}
-      }
+      $temp = $Path + ".tmp"
+      $Conf | Set-Content -Path $temp
+      $control = Get-Content $temp -Raw
+      Remove-Item -Path $temp -Force
+      if (Compare-Object -ReferenceObject $control -DifferenceObject (Get-Content $Path -Raw))
+        {
+          $false
+        }
+      else {$true}
+    }
     'set' {
-        $Conf | Set-Content -Path $Path
-      }
+      $Conf | Set-Content -Path $Path
+    }
   }
 }
 
 function webconfvar {
-param (
+  param (
     [bool]$AllowNugetPackagePush,
     [bool]$AllowPackageOverwrite,
     [string]$PackageSource,
     [string]$APIKey
   )
-@"
+  $ExecutionContext.InvokeCommand.ExpandString($webconf)
+}
+
+function provider {
+  param (
+    [validateset('test','set')]
+    [string]$Action,
+    [string]$Name,
+    [string]$PublisherURI,
+    [string]$SourceURI,
+    [string]$Type
+  )
+  switch ($Action) {
+    'test' {
+      if (Get-PSRepository -Name $Name)
+        {
+          $true
+        }
+      else {$false}
+    }
+    'set' {
+      $null = Register-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
+    }
+  }
+}
+
+$webconf = @'
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   For more information on how to configure your ASP.NET application, please visit
@@ -211,29 +235,4 @@ param (
   </appSettings><system.serviceModel>
     <serviceHostingEnvironment aspNetCompatibilityEnabled="true"/>
   </system.serviceModel></configuration>
-"@
-}
-
-function provider {
-Param (
-    [validateset('test','set')]
-    [string]$Action,
-    [string]$Name,
-    [string]$PublisherURI,
-    [string]$SourceURI,
-    [string]$Type
-  )
-switch ($Action)
-  {
-    'test' {
-        if (Get-PSRepository -Name $Name)
-          {
-            $true
-          }
-        else {$false}
-      }
-    'set' {
-        $null = Register-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
-      }
-  }
-}
+'@
