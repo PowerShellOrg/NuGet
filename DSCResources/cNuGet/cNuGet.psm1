@@ -24,7 +24,7 @@ class cNuget {
   
   #Test Method, tests if the system is in the desired state 
   [bool] Test () { 
-    $Conf = webconfvar -AllowNugetPackagePush $AllowNugetPackagePush -AllowPackageOverwrite $AllowPackageOverwrite -PackageSource $PackageSource -APIKey $APIKey
+    $Conf = webconfvar -AllowNugetPackagePush $This.AllowNugetPackagePush -AllowPackageOverwrite $This.AllowPackageOverwrite -PackageSource $This.PackageSource -APIKey $This.APIKey
     Write-Verbose 'Working on IIS install'
     if (! (IIS -Action test))
     {
@@ -36,7 +36,7 @@ class cNuget {
       return $false
     }
     Write-Verbose 'Testing package directory'
-    if (! (pkg -Action test -path $PackageSource))
+    if (! (pkg -Action test -path $This.PackageSource))
     {
       return $false
     }
@@ -69,10 +69,10 @@ class cNuget {
       ASP -Action set
     }
     Write-Verbose 'Working on package directory'
-    if (! (pkg -Action test -path $PackageSource))
+    if (! (pkg -Action test -path $This.PackageSource))
     {
       Write-Verbose 'Creating Package directory'
-      pkg -Action set -path $PackageSource
+      pkg -Action set -path $This.PackageSource
     }
     Write-Verbose 'Checking WWWRoot files'
     if (! (Zip -Action test ))
