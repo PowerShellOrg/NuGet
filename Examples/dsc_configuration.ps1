@@ -2,7 +2,7 @@ configuration default {
   param (
     $ComputerName = 'localhost'
   )
-  Import-DscResource cNuget
+  Import-DscResource -Module cNuget
   
   node $ComputerName {
     cNuget default {
@@ -13,3 +13,5 @@ configuration default {
     }
   }
 }
+default
+Start-DscConfiguration -Path default -Force -Wait -Verbose

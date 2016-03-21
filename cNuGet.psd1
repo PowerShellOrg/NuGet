@@ -12,7 +12,7 @@
 RootModule = 'cNuget.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.1.10'
+ModuleVersion = '1.2.1'
 
 # ID used to uniquely identify this module
 GUID = 'f8ece87b-543c-4aa1-8082-1de98d06b4a2'
