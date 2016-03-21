@@ -9,10 +9,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-# RootModule = ''
+RootModule = 'cNuget.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.1.7'
+ModuleVersion = '1.1.10'
 
 # ID used to uniquely identify this module
 GUID = 'f8ece87b-543c-4aa1-8082-1de98d06b4a2'
@@ -78,7 +78,7 @@ VariablesToExport = @()
 AliasesToExport = @()
 
 # DSC resources to export from this module
-DscResourcesToExport = @('cNuget', 'cPSRepository')
+DscResourcesToExport = @('cNuget')
 
 # List of all modules packaged with this module
 # ModuleList = @()

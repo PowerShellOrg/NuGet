@@ -1,5 +1,3 @@
-Import-Module $PSScriptRoot\..\..\tools.psm1
-
 enum Ensure {
   Present
   Absent
@@ -24,6 +22,7 @@ class cNuget {
   
   #Test Method, tests if the system is in the desired state 
   [bool] Test () { 
+    Import-Module $PSScriptRoot\tools.psm1
     $Conf = webconfvar -AllowNugetPackagePush $This.AllowNugetPackagePush -AllowPackageOverwrite $This.AllowPackageOverwrite -PackageSource $This.PackageSource -APIKey $This.APIKey
     Write-Verbose 'Working on IIS install'
     if (! (IIS -Action test))
@@ -55,6 +54,7 @@ class cNuget {
   
   #Replaces Set-TargetResource 
   [void] Set () { 
+    Import-Module $PSScriptRoot\tools.psm1
     $Conf = webconfvar -AllowNugetPackagePush $this.AllowNugetPackagePush -AllowPackageOverwrite $this.AllowPackageOverwrite -PackageSource $this.PackageSource -APIKey $this.APIKey
     Write-Verbose 'Working on IIS install'
     if (! (IIS -Action test))
