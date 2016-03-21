@@ -5,11 +5,11 @@ enum Ensure {
   Absent
 }
 
-[DSCResource[]]
+[DSCResource()]
 class cNuget {
   #Declare Properties
   [DscProperty(Key)] 
-  [string]$Path
+  [string]$PackageSource
   [DscProperty(Mandatory)]
   [string]$APIKey
   [DscProperty()]
@@ -18,21 +18,12 @@ class cNuget {
   [Boolean]$AllowPackageOverwrite
   #Define Methods
   #Get Method, gathers data about the system state  
-  [hashtable] Get() { 
-    $Conf = webconfvar -AllowNugetPackagePush $This.AllowNugetPackagePush -AllowPackageOverwrite $This.AllowPackageOverwrite -PackageSource $This.PackageSource -APIKey $This.APIKey
-    $return = @{
-      IISInstalled = IIS -Action Test
-      ASPInstalled = ASP -Action Test
-      WWWRootFiles = Zip -action test
-      WebConfig = webconf -Conf $Conf -Action test
-	}
-    }
-
-    return $return
+  [cNuget] Get () { 
+    return $this
   } 
   
   #Test Method, tests if the system is in the desired state 
-  [bool] Test() { 
+  [bool] Test () { 
     $Conf = webconfvar -AllowNugetPackagePush $AllowNugetPackagePush -AllowPackageOverwrite $AllowPackageOverwrite -PackageSource $PackageSource -APIKey $APIKey
     Write-Verbose 'Working on IIS install'
     if (! (IIS -Action test))
@@ -63,7 +54,7 @@ class cNuget {
   } 
   
   #Replaces Set-TargetResource 
-  [void] Set() { 
+  [void] Set () { 
     $Conf = webconfvar -AllowNugetPackagePush $this.AllowNugetPackagePush -AllowPackageOverwrite $this.AllowPackageOverwrite -PackageSource $this.PackageSource -APIKey $this.APIKey
     Write-Verbose 'Working on IIS install'
     if (! (IIS -Action test))
