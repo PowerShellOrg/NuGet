@@ -1,0 +1,24 @@
+---
+driver:
+  name: vagrant
+
+transport:
+  name: winrm
+
+provisioner:
+  name: dsc
+
+verifier:
+  name: pester
+
+platforms:
+  - name: windows-2012r2
+    driver:
+      box: jason/Windows2012R2
+      synced_folders:
+      network:
+
+suites:
+  - name: default
+    run_list:
+    attributes:
