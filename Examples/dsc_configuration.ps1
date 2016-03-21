@@ -6,12 +6,10 @@ configuration default {
   
   node $ComputerName {
     cNuget default {
-      Path = "$ENV:SYSTEMDRIVE\Packages"
+      PackageSource = "$ENV:SYSTEMDRIVE\Packages"
       APIKey = 'myapikey'
       AllowNugetPackagePush = $true
       AllowPackageOverwrite = $true
     }
   }
 }
-default
-Start-DscConfiguration -Path default -Force -Wait -Verbose

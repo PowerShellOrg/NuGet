@@ -56,7 +56,6 @@ DEPENDENCIES
   kitchen-hyperv
   kitchen-pester
   mixlib-shellout
-  net-ssh
   test-kitchen
   winrm-transport
 

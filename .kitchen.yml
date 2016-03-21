@@ -8,6 +8,7 @@ transport:
 provisioner:
   name: dsc
   modules_path: ../DSCResources
+  dsc_local_configuration_manager_version: wmf5
 
 verifier:
   name: pester
@@ -15,9 +16,7 @@ verifier:
 platforms:
   - name: windows-2012r2
     driver:
-      box: jason/Windows2012R2
-      synced_folders:
-      network:
+      box: VzISD/Windows2012R2
 
 suites:
   - name: default
