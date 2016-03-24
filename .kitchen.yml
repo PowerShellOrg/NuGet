@@ -7,7 +7,6 @@ transport:
 
 provisioner:
   name: dsc
-  modules_path: ../DSCResources
   dsc_local_configuration_manager_version: wmf5
 
 verifier:
