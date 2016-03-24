@@ -128,17 +128,68 @@ function provider {
   )
   switch ($Action) {
     'test' {
-      if (Get-PSRepository -Name $Name)
+      Write-Verbose "Checking for provider: $Name"
+      if (Get-PSRepository -Name $Name -ErrorAction SilentlyContinue)
         {
           $true
         }
       else {$false}
     }
     'set' {
-      $null = Register-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
+      $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName PSModule -Force -ForceBootstrap -Scope AllUsers
+      $null = Set-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
+      
+      
     }
   }
 }
+
+function nuget_provider {
+  param (
+    [validateset('test','set')]
+    [string]$Action,
+    [string]$Name,
+    [string]$SourceURI,
+    [string]$Type
+  )
+  switch ($Action) {
+    'test' {
+      Write-Verbose "Checking for provider: $Name"
+      if (Get-PackageSource -Name $Name -ErrorAction SilentlyContinue)
+        {
+          $true
+        }
+      else {$false}
+    }
+    'set' {
+      $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName Nuget -Force -ForceBootstrap -Scope AllUsers
+    }
+  }
+}
+
+function choco_provider {
+  param (
+    [validateset('test','set')]
+    [string]$Action,
+    [string]$Name,
+    [string]$SourceURI,
+    [string]$Type
+  )
+  switch ($Action) {
+    'test' {
+      Write-Verbose "Checking for provider: $Name"
+      if (Get-PackageSource -Name $Name -ErrorAction SilentlyContinue)
+        {
+          $true
+        }
+      else {$false}
+    }
+    'set' {
+      $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName Chocolatey -Force -ForceBootstrap -Scope AllUsers      
+    }
+  }
+}
+
 
 $webconf = @'
 <?xml version="1.0" encoding="utf-8"?>
