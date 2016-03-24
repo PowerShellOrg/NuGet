@@ -12,7 +12,7 @@
 RootModule = 'cNuget.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.2'
+ModuleVersion = '1.2.3'
 
 # ID used to uniquely identify this module
 GUID = 'f8ece87b-543c-4aa1-8082-1de98d06b4a2'
@@ -54,7 +54,7 @@ ProcessorArchitecture = 'None'
 RequiredAssemblies = @()
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
-ScriptsToProcess = @()
+# ScriptsToProcess = @('cPSRepo.ps1')
 
 # Type files (.ps1xml) to be loaded when importing this module
 TypesToProcess = @()
@@ -63,7 +63,7 @@ TypesToProcess = @()
 FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+NestedModules = @('tools.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @()
@@ -78,7 +78,7 @@ VariablesToExport = @()
 AliasesToExport = @()
 
 # DSC resources to export from this module
-DscResourcesToExport = @('cNuget')
+DscResourcesToExport = @('cNuget','cPSRepo','cPackageManager')
 
 # List of all modules packaged with this module
 # ModuleList = @()
