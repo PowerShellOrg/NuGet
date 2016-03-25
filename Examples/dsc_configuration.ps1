@@ -24,11 +24,11 @@ configuration default {
     }
     cPSRepo default {
       Ensure = 'Present'
-      ProviderName = 'Local'
+      Name = 'Local'
       PublishUri = 'http://localhost/'
       SourceUri = 'http://localhost/nuget'
       InstallPolicy = 'trusted'
-      #PSDscRunAsCredential = $cred
-    }
+      PSDscRunAsCredential = $cred
+    }#>
   }
 }

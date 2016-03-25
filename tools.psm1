@@ -124,68 +124,79 @@ function provider {
     [string]$Name,
     [string]$PublisherURI,
     [string]$SourceURI,
-    [string]$Type
+    [string]$Type,
+    [string]$Ensure
   )
   switch ($Action) {
     'test' {
       Write-Verbose "Checking for provider: $Name"
       if (Get-PSRepository -Name $Name -ErrorAction SilentlyContinue)
         {
-          $true
+          $return = $true
         }
-      else {$false}
+      else {$return = $false}
+      switch ($Ensure) {
+        Present {
+          return $return
+        }
+        Absent {
+          return (! $return)
+        }
+      }
     }
     'set' {
-      $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName PSModule -Force -ForceBootstrap -Scope AllUsers
-      $null = Set-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
-      
+      switch ($Ensure) {
+        Present {
+          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName PowerShellGet -Force -ForceBootstrap
+          $null = Set-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
+        }
+        Absent {
+          $null = Unregister-PackageSource -Name $Name -Force
+        }
+      }
       
     }
   }
 }
 
-function nuget_provider {
+function package_provider {
   param (
     [validateset('test','set')]
     [string]$Action,
     [string]$Name,
     [string]$SourceURI,
-    [string]$Type
+    [string]$Type,
+    [string]$ProviderName,
+    [string]$Ensure
   )
   switch ($Action) {
     'test' {
       Write-Verbose "Checking for provider: $Name"
       if (Get-PackageSource -Name $Name -ErrorAction SilentlyContinue)
         {
-          $true
+          $return = $true
         }
-      else {$false}
+      else {$return = $false}
+      switch ($Ensure) {
+        Present {
+          return $return
+        }
+        Absent {
+          return (! $return)
+        }
+      }
+      
     }
     'set' {
-      $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName Nuget -Force -ForceBootstrap -Scope AllUsers
-    }
-  }
-}
-
-function choco_provider {
-  param (
-    [validateset('test','set')]
-    [string]$Action,
-    [string]$Name,
-    [string]$SourceURI,
-    [string]$Type
-  )
-  switch ($Action) {
-    'test' {
-      Write-Verbose "Checking for provider: $Name"
-      if (Get-PackageSource -Name $Name -ErrorAction SilentlyContinue)
-        {
-          $true
+      switch ($Ensure) {
+        Present {
+          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap
         }
-      else {$false}
-    }
-    'set' {
-      $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName Chocolatey -Force -ForceBootstrap -Scope AllUsers      
+        Absent {
+          $null = Unregister-PackageSource -Name $Name -Force
+        }
+      }
+      
     }
   }
 }

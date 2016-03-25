@@ -8,13 +8,56 @@ enum policies {
   Untrusted
 }
 
+Import-Module $PSScriptRoot\tools.psm1
+
+[DSCResource()]
+class cPackageRepo {
+  #Declare Properties
+  [DscProperty(Key)] 
+  [ensures]$Ensure
+  [DscProperty(Mandatory)]
+  [string]$Name
+  [DscProperty(Mandatory)]
+  [string]$ProviderName
+  [DscProperty(Mandatory)]
+  [string]$PublishUri
+  [DscProperty(Mandatory)]
+  [string]$SourceUri
+  [DscProperty(Mandatory)]
+  [policies]$InstallPolicy
+  #Define Methods
+  #Get Method, gathers data about the system state  
+  [cPackageRepo] Get () { 
+    return $this
+  } 
+  
+  #Test Method, tests if the system is in the desired state 
+  [bool] Test () { 
+    Import-Module $PSScriptRoot\tools.psm1
+    if (! (provider -Name $this.Name -Action test -Ensure $this.Ensure)) {
+      return $false
+    }
+    return $true
+    
+  } 
+  
+  #Replaces Set-TargetResource 
+  [void] Set () { 
+    Import-Module $PSScriptRoot\tools.psm1
+    if (! (provider -Name $this.Name -Action test )) {
+      Write-Verbose 'creating new provider'
+      provider -Name $this.Name -Action set -PublisherURI $this.PublishURI -SourceURI $this.SourceURI -Type $this.InstallPolicy -Credential $this.Credential -Ensure $this.Ensure
+    }
+  }
+}
+
 [DSCResource()]
 class cPSRepo {
   #Declare Properties
   [DscProperty(Key)] 
   [ensures]$Ensure
   [DscProperty(Mandatory)]
-  [string]$ProviderName
+  [string]$Name
   [DscProperty(Mandatory)]
   [string]$PublishUri
   [DscProperty(Mandatory)]
@@ -29,7 +72,8 @@ class cPSRepo {
   
   #Test Method, tests if the system is in the desired state 
   [bool] Test () { 
-    if (! (provider -Name $this.ProviderName -Action test )) {
+    Import-Module $PSScriptRoot\tools.psm1
+    if (! (provider -Name $this.Name -Action test -Ensure $this.Ensure)) {
       return $false
     }
     return $true
@@ -37,9 +81,10 @@ class cPSRepo {
   
   #Replaces Set-TargetResource 
   [void] Set () { 
-    if (! (provider -Name $this.ProviderName -Action test )) {
+    Import-Module $PSScriptRoot\tools.psm1
+    if (! (provider -Name $this.Name -Action test -Ensure $this.Ensure)) {
       Write-Verbose 'creating new provider'
-      provider -Name $this.ProviderName -Action set -PublisherURI $this.PublishURI -SourceURI $this.SourceURI -Type $this.InstallPolicy -Credential $this.Credential
+      provider -Name $this.Name -Action set -PublisherURI $this.PublishURI -SourceURI $this.SourceURI -Type $this.InstallPolicy -Credential $this.Credential -Ensure $this.Ensure
     }
   }
 }
