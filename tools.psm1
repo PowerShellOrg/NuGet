@@ -205,9 +205,9 @@ function package_provider {
     'test' {
       Write-Verbose "Checking for provider: $Name"
       if (Get-PackageSource -Name $Name -ErrorAction SilentlyContinue)
-        {
-          $return = $true
-        }
+      {
+        $return = $true
+      }
       else {$return = $false}
       switch ($Ensure) {
         Present {
@@ -220,10 +220,10 @@ function package_provider {
       
     }
     'set' {
-      $Null = Find-PackageProvider -Name Nuget -ForceBootstrap -Force -ErrorAction Ignore -WarningAction Ignore
+      $Null = Find-PackageProvider -Name Nuget -ForceBootstrap -Force
       switch ($Ensure) {
         Present {
-          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap -Trusted -ErrorAction Ignore -WarningAction Ignore
+          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap -Trusted
         }
         Absent {
           $null = Unregister-PackageSource -Name $Name -Force

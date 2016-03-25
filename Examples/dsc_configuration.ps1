@@ -32,7 +32,7 @@ configuration default {
       InstallPolicy = 'trusted'
       PSDscRunAsCredential = $cred
     }#>
-    cPSRepo PSGallery {
+    <#cPSRepo PSGallery {
       Ensure = 'Absent'
       Name = 'PSGallery'
       PSDscRunAsCredential = $cred
@@ -49,7 +49,7 @@ configuration default {
       Ensure = 'Present'
       Name = 'Packages'
       ProviderName = 'Nuget'
-      SourceUri = 'http://localhost:82'
+      SourceUri = 'http://localhost:82/nuget'
       InstallPolicy = 'Trusted'
       PSDscRunAsCredential = $cred
     }

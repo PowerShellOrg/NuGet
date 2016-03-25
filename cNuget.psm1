@@ -44,7 +44,7 @@ class cPackageRepo {
   [void] Set () { 
     Import-Module $PSScriptRoot\tools.psm1
     Write-Verbose 'creating new provider'
-    package_provider -Name $this.Name -Action set -SourceURI $this.SourceURI -Credential $this.Credential -Ensure $this.Ensure
+    package_provider -Name $this.Name -Action set -SourceURI $this.SourceURI -Credential $this.Credential -Ensure $this.Ensure -ProviderName $this.ProviderName
   }
 }
 
@@ -55,12 +55,12 @@ class cPSRepo {
   [ensures]$Ensure
   [DscProperty(Mandatory)]
   [string]$Name
-  [DscProperty(Mandatory)]
+  [DscProperty()]
   [string]$PublishUri
-  [DscProperty(Mandatory)]
+  [DscProperty()]
   [string]$SourceUri
-  [DscProperty(Mandatory)]
-  [policies]$InstallPolicy
+  [DscProperty()]
+  [policies]$InstallPolicy = 'Trusted'
   #Define Methods
   #Get Method, gathers data about the system state  
   [cPSRepo] Get () { 
