@@ -8,6 +8,11 @@ enum policies {
   Untrusted
 }
 
+enum protocols {
+  http
+  https
+}
+
 Import-Module $PSScriptRoot\tools.psm1
 
 [DSCResource()]
@@ -82,6 +87,12 @@ class cNuget {
   [DscProperty(Key)] 
   [string]$PackageSource
   [DscProperty(Mandatory)]
+  [string]$Name
+  [DscProperty(Mandatory)]
+  [int]$Port
+  [DscProperty()]
+  [protocols]$Protocol = 'http'
+  [DscProperty(Mandatory)]
   [string]$APIKey
   [DscProperty()]
   [Boolean]$AllowNugetPackagePush
@@ -112,13 +123,18 @@ class cNuget {
     {
       return $false
     }
+    Write-Verbose 'Testing for the website'
+    if (! (website -Name $this.Name -Action Test))
+    {
+      return $false
+    }
     Write-Verbose 'Checking WWWRoot files'
-    if (! (Zip -Action test ))
+    if (! (Zip -Action test -Path $this.PackageSource ))
     {
       return $false
     }
     Write-Verbose 'Checking Web.config'
-    if (! (webconf -Action test -Conf $Conf))
+    if (! (webconf -Action test -Conf $Conf -Path "$($this.PackageSource)\Web.config"))
     {
       return $false
     }
@@ -147,17 +163,29 @@ class cNuget {
       Write-Verbose 'Creating Package directory'
       pkg -Action set -path $This.PackageSource
     }
+    Write-Verbose 'Testing for the website'
+    if (! (website -Name $this.Name -Action Test))
+    {
+      switch ($this.Protocol) {
+        http {
+          website -Name $this.Name -Action Set -Port $this.Port -Path $this.PackageSource
+        }
+        https {
+          website -Name $this.Name -Action Set -Port $this.Port -Path $this.PackageSource -Ssl
+        }
+      } 
+    }
     Write-Verbose 'Checking WWWRoot files'
     if (! (Zip -Action test ))
     {
       Write-Verbose 'Building out wwwroot'
-      Zip -Action set
+      Zip -Action set -Path $this.PackageSource
     }
     Write-Verbose 'Checking Web.config'
-    if (! (webconf -Action test -Conf $Conf))
+    if (! (webconf -Action test -Conf $Conf -Path "$($this.PackageSource)\Web.config"))
     {
       Write-Verbose 'setting web.config'
-      webconf -Action set -Conf $Conf
+      webconf -Action set -Conf $Conf -Path "$($this.PackageSource)\Web.config"
     }
   }
 }

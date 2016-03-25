@@ -7,7 +7,7 @@ describe "Testing the default configuration of cNuget" {
             get-website -name "*" | should not be $null
         }
         it "ensures bits directory exists" {
-            test-path $env:SYSTEMDRIVE\Packages -type container | should be true
+            test-path $env:SYSTEMDRIVE\Modules -type container | should be true
         }
         it "ensures w3svc is running" {
             (get-service -name w3svc).status | should match 'running'

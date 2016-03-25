@@ -19,7 +19,7 @@
     'set' {
       switch ($Ssl) {
         $True {
-          New-Website -Name $Name -PhysicalPath $Path -Port $Port
+          New-Website -Name $Name -PhysicalPath $Path -Port $Port -Ssl
         }
         $False {
           New-Website -Name $Name -PhysicalPath $Path -Port $Port

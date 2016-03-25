@@ -17,7 +17,9 @@ configuration default {
   
   node $ComputerName {
     cNuget default {
-      PackageSource = "$ENV:SYSTEMDRIVE\Packages"
+      PackageSource = "$ENV:SYSTEMDRIVE\Modules"
+      Name = 'Modules'
+      Port = 81
       APIKey = 'myapikey'
       AllowNugetPackagePush = $true
       AllowPackageOverwrite = $true
