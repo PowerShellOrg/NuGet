@@ -164,9 +164,9 @@ function provider {
     'test' {
       Write-Verbose "Checking for provider: $Name"
       if (Get-PSRepository -Name $Name -ErrorAction SilentlyContinue)
-        {
-          $return = $true
-        }
+      {
+        $return = $true
+      }
       else {$return = $false}
       switch ($Ensure) {
         Present {
@@ -180,7 +180,7 @@ function provider {
     'set' {
       switch ($Ensure) {
         Present {
-          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName PowerShellGet -Force -ForceBootstrap
+          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName PowerShellGet -Force -ForceBootstrap -WarningAction Ignore -ErrorAction Ignore
           $null = Set-PSRepository -Name $Name -SourceLocation $SourceURI -PublishLocation $PublisherURI -InstallationPolicy $Type
         }
         Absent {
@@ -220,10 +220,10 @@ function package_provider {
       
     }
     'set' {
-      $Null = Find-PackageProvider -Name Nuget -ForceBootstrap -Force
+      $Null = Find-PackageProvider -Name Nuget -ForceBootstrap -Force -ErrorAction Ignore -WarningAction Ignore
       switch ($Ensure) {
         Present {
-          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap -Trusted
+          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap -Trusted -ErrorAction Ignore -WarningAction Ignore
         }
         Absent {
           $null = Unregister-PackageSource -Name $Name -Force

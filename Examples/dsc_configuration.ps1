@@ -24,11 +24,11 @@ configuration default {
       AllowNugetPackagePush = $true
       AllowPackageOverwrite = $true
     }
-    <#cPSRepo default {
+    cPSRepo default {
       Ensure = 'Present'
-      Name = 'Local'
-      PublishUri = 'http://localhost/'
-      SourceUri = 'http://localhost/nuget'
+      Name = 'Modules'
+      PublishUri = 'http://localhost:81/'
+      SourceUri = 'http://localhost:81/nuget'
       InstallPolicy = 'trusted'
       PSDscRunAsCredential = $cred
     }#>
