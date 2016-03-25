@@ -8,6 +8,16 @@ transport:
 provisioner:
   name: dsc
   dsc_local_configuration_manager_version: wmf5
+  dsc_local_configuration_manager:
+    action_after_reboot: 'StopConfiguration'
+    allow_module_overwrite: false
+    certificate_id: nil
+    configuration_mode: 'ApplyAndAutoCorrect'
+    configuration_mode_frequency_mins: 30
+    debug_mode: 'None'
+    reboot_if_needed: false
+    refresh_frequency_mins: 30
+    refresh_mode: 'PUSH'
 
 verifier:
   name: pester
