@@ -12,7 +12,7 @@
 RootModule = 'cNuget.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.4'
+ModuleVersion = '1.2.5'
 
 # ID used to uniquely identify this module
 GUID = 'f8ece87b-543c-4aa1-8082-1de98d06b4a2'
@@ -92,7 +92,15 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @(
+          'Nuget'
+          'PowerShellGet'
+          'Package'
+          'PackageManager'
+          'Module'
+          'DSC'
+          'PSGallery'
+        )
 
         # A URL to the license for this module.
         # LicenseUri = ''
