@@ -6,8 +6,8 @@ $ConfigurationData = @{
       }
     )
 }
-$pass = (convertto-securestring -asplaintext -force '$piderM@n1')
-$cred = (New-Object System.Management.Automation.PSCredential ('Administrator', $pass))
+$pass = (convertto-securestring -asplaintext -force 'vagrant')
+$cred = (New-Object System.Management.Automation.PSCredential ('vagrant', $pass))
 
 configuration default {
   param (
@@ -32,5 +32,26 @@ configuration default {
       InstallPolicy = 'trusted'
       PSDscRunAsCredential = $cred
     }#>
+    cPSRepo PSGallery {
+      Ensure = 'Absent'
+      Name = 'PSGallery'
+      PSDscRunAsCredential = $cred
+    }#>
+    cNuget packages {
+      PackageSource = "$ENV:SYSTEMDRIVE\Packages"
+      Name = 'Packages'
+      Port = 82
+      APIKey = 'myapikey'
+      AllowNugetPackagePush = $true
+      AllowPackageOverwrite = $true
+    }
+    cPackageRepo default {
+      Ensure = 'Present'
+      Name = 'Packages'
+      ProviderName = 'Nuget'
+      SourceUri = 'http://localhost:82'
+      InstallPolicy = 'Trusted'
+      PSDscRunAsCredential = $cred
+    }
   }
 }
