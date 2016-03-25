@@ -22,7 +22,7 @@ configuration default {
       AllowNugetPackagePush = $true
       AllowPackageOverwrite = $true
     }
-    cPSRepo default {
+    <#cPSRepo default {
       Ensure = 'Present'
       Name = 'Local'
       PublishUri = 'http://localhost/'

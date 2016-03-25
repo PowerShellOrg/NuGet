@@ -1,4 +1,37 @@
-﻿
+﻿function website {
+  param (
+    [string]$Name,
+    [string]$Path,
+    [int]$Port,
+    [switch]$Ssl,
+    [string]$Action
+  )
+  switch ($Action)
+  {
+    'test' {
+      if (get-website -name $Name) {
+        return $true
+      } 
+      else {
+        return $false
+      }
+    }
+    'set' {
+      switch ($Ssl) {
+        $True {
+          New-Website -Name $Name -PhysicalPath $Path -Port $Port
+        }
+        $False {
+          New-Website -Name $Name -PhysicalPath $Path -Port $Port
+        }
+      }
+      
+    }
+  }
+}
+
+#code "New-Website -Name #{site['name']} -PhysicalPath #{site['directory']} -Port #{site['port']}"
+#not_if "if (get-website -name #{site['name']}) {$true} else {$false}"
 
 function IIS {
   param (
@@ -165,7 +198,6 @@ function package_provider {
     [string]$Action,
     [string]$Name,
     [string]$SourceURI,
-    [string]$Type,
     [string]$ProviderName,
     [string]$Ensure
   )
@@ -188,15 +220,15 @@ function package_provider {
       
     }
     'set' {
+      $Null = Find-PackageProvider -Name Nuget -ForceBootstrap -Force
       switch ($Ensure) {
         Present {
-          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap
+          $null = Register-PackageSource -Name $Name -Location $SourceURI -ProviderName $ProviderName -Force -ForceBootstrap -Trusted
         }
         Absent {
           $null = Unregister-PackageSource -Name $Name -Force
         }
       }
-      
     }
   }
 }
