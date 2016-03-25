@@ -20,8 +20,6 @@ class cPackageRepo {
   [DscProperty(Mandatory)]
   [string]$ProviderName
   [DscProperty(Mandatory)]
-  [string]$PublishUri
-  [DscProperty(Mandatory)]
   [string]$SourceUri
   [DscProperty(Mandatory)]
   [policies]$InstallPolicy
@@ -34,20 +32,14 @@ class cPackageRepo {
   #Test Method, tests if the system is in the desired state 
   [bool] Test () { 
     Import-Module $PSScriptRoot\tools.psm1
-    if (! (provider -Name $this.Name -Action test -Ensure $this.Ensure)) {
-      return $false
-    }
-    return $true
-    
+    return (package_provider -Name $this.Name -Action test -Ensure $this.Ensure)
   } 
   
   #Replaces Set-TargetResource 
   [void] Set () { 
     Import-Module $PSScriptRoot\tools.psm1
-    if (! (provider -Name $this.Name -Action test )) {
-      Write-Verbose 'creating new provider'
-      provider -Name $this.Name -Action set -PublisherURI $this.PublishURI -SourceURI $this.SourceURI -Type $this.InstallPolicy -Credential $this.Credential -Ensure $this.Ensure
-    }
+    Write-Verbose 'creating new provider'
+    package_provider -Name $this.Name -Action set -SourceURI $this.SourceURI -Credential $this.Credential -Ensure $this.Ensure
   }
 }
 
@@ -73,19 +65,14 @@ class cPSRepo {
   #Test Method, tests if the system is in the desired state 
   [bool] Test () { 
     Import-Module $PSScriptRoot\tools.psm1
-    if (! (provider -Name $this.Name -Action test -Ensure $this.Ensure)) {
-      return $false
-    }
-    return $true
+    return (provider -Name $this.Name -Action test -Ensure $this.Ensure)
   } 
   
   #Replaces Set-TargetResource 
   [void] Set () { 
     Import-Module $PSScriptRoot\tools.psm1
-    if (! (provider -Name $this.Name -Action test -Ensure $this.Ensure)) {
-      Write-Verbose 'creating new provider'
-      provider -Name $this.Name -Action set -PublisherURI $this.PublishURI -SourceURI $this.SourceURI -Type $this.InstallPolicy -Credential $this.Credential -Ensure $this.Ensure
-    }
+    Write-Verbose 'creating new provider'
+    provider -Name $this.Name -Action set -PublisherURI $this.PublishURI -SourceURI $this.SourceURI -Type $this.InstallPolicy -Credential $this.Credential -Ensure $this.Ensure
   }
 }
 
