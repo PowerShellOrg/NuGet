@@ -1,10 +1,90 @@
-﻿function website {
+﻿enum actions {
+  Set
+  Test
+}
+
+enum ensures {
+  Present
+  Absent
+}
+
+function Module {
+  param (
+    [actions]$Action,
+    [string]$Name,
+    [System.Version]$Version,
+    [string]$ProviderName,
+    [ensures]$Ensure
+  )
+  switch ($Action) {
+    Test {
+      $Module = Get-Module -ListAvailable -Name $Name
+      if ((! $Module) -or ($Module.version -lt $Version)) {$return = $false}
+      else {$return = $true}
+      switch ($Ensure) {
+        Present {
+          $return
+        }
+        Absent {
+          ! $return
+        }
+      }
+    }
+    Set {
+      switch ($Ensure) {
+        Present {
+          Find-Module -Repository $ProviderName -Name $Name -RequiredVersion $Version | Install-Module -Force -Scope AllUsers
+        }
+        Absent {
+          Uninstall-Module -Name $Name -Force
+        }
+      }
+    }
+  }
+}
+
+function Package {
+  param (
+    [actions]$Action,
+    [string]$Name,
+    [version]$Version,
+    [string]$ProviderName,
+    [ensures]$Ensure
+  )
+  switch ($Action) {
+    Test {
+      $pkg = Get-Package -Name $Name -ErrorAction SilentlyContinue
+      if ((! $pkg) -or ($pkg.version -lt $Version)) {$return = $false}
+      else {$return = $true}
+      switch ($Ensure) {
+        Present {
+          $return
+        }
+        Absent {
+          ! $return
+        }
+      }
+    }
+    Set {
+      switch ($Ensure) {
+        Present {
+          Find-Package -Source $ProviderName -Name $Name -RequiredVersion $Version | Install-Package -Force -Scope AllUsers
+        }
+        Absent {
+          Uninstall-Package -Name $Name -Force
+        }
+      }
+    }
+  }
+}
+
+function website {
   param (
     [string]$Name,
     [string]$Path,
     [int]$Port,
     [switch]$Ssl,
-    [string]$Action
+    [actions]$Action
   )
   switch ($Action)
   {
@@ -30,13 +110,10 @@
   }
 }
 
-#code "New-Website -Name #{site['name']} -PhysicalPath #{site['directory']} -Port #{site['port']}"
-#not_if "if (get-website -name #{site['name']}) {$true} else {$false}"
-
 function IIS {
   param (
     [validateset('test','set')]
-    [string]$Action
+    [actions]$Action
   )
   switch ($Action)
   {
@@ -52,7 +129,7 @@ function IIS {
 function ASP {
   param (
       [validateset('test','set')]
-      [string]$Action
+      [actions]$Action
     )
   switch ($Action) {
       'test' {
@@ -67,7 +144,7 @@ function ASP {
 function Zip {
   param (
     [validateset('test','set')]
-    [string]$Action,
+    [actions]$Action,
     [string]$Path = "$env:Systemdrive\inetpub\wwwroot"
   )
   $names = @(
@@ -102,7 +179,7 @@ function Zip {
 function pkg {
   param (
     [validateset('test','set')]
-    [string]$Action,
+    [actions]$Action,
     [string]$path
   )
   switch ($Action) {
@@ -118,7 +195,7 @@ function pkg {
 function webconf {
   param (
     [validateset('test','set')]
-    [string]$Action,
+    [actions]$Action,
     [string]$Path =  "$env:SystemDrive\inetpub\wwwroot\Web.config",
     [string]$Conf
   )
@@ -153,7 +230,7 @@ function webconfvar {
 function provider {
   param (
     [validateset('test','set')]
-    [string]$Action,
+    [actions]$Action,
     [string]$Name,
     [string]$PublisherURI,
     [string]$SourceURI,
@@ -195,7 +272,7 @@ function provider {
 function package_provider {
   param (
     [validateset('test','set')]
-    [string]$Action,
+    [actions]$Action,
     [string]$Name,
     [string]$SourceURI,
     [string]$ProviderName,

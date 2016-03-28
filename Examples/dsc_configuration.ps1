@@ -31,12 +31,7 @@ configuration default {
       SourceUri = 'http://localhost:81/nuget'
       InstallPolicy = 'trusted'
       PSDscRunAsCredential = $cred
-    }#>
-    <#cPSRepo PSGallery {
-      Ensure = 'Absent'
-      Name = 'PSGallery'
-      PSDscRunAsCredential = $cred
-    }#>
+    }
     cNuget packages {
       PackageSource = "$ENV:SYSTEMDRIVE\Packages"
       Name = 'Packages'
@@ -53,5 +48,27 @@ configuration default {
       InstallPolicy = 'Trusted'
       PSDscRunAsCredential = $cred
     }
+    cPackageRepo choco {
+      Ensure = 'Present'
+      Name = 'chocolatey'
+      ProviderName = 'chocolatey'
+      SourceUri = 'http://chocolatey.org/api/v2/'
+      InstallPolicy = 'Trusted'
+      PSDscRunAsCredential = $cred
+    }
+    cModule Steroids {
+      Ensure = 'Present'
+      Name = 'ISESteroids'
+      ProviderName = 'PSGallery'
+      Version = '2.3.0.64'
+      PSDscRunAsCredential = $cred
+    }#>
+    cPackage git {
+      Ensure = 'Present'
+      Name = 'git'
+      ProviderName = 'chocolatey'
+      Version = '2.7.4'
+      PSDscRunAsCredential = $cred
+    }#>
   }
 }

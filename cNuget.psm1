@@ -15,14 +15,88 @@ enum protocols {
 
 Import-Module $PSScriptRoot\tools.psm1
 
+[DscResource()]
+class cModule {
+  #Declare Properties
+  [DscProperty(Key)]
+  [ensures] $Ensure
+  [DscProperty(Mandatory)]
+  [string] $Name
+  [DscProperty()]
+  [string] $Version
+  [DscProperty(Mandatory)]
+  [string] $ProviderName
+  
+  # Gets the resource's current state.
+  [cModule] Get () {
+    return $this
+  }
+  
+  # Tests if the resource is in the desired state.
+  [bool] Test () {
+    Import-Module $PSScriptRoot\tools.psm1
+    return (Module -Ensure $this.ensure -Action Test -Name $this.Name)
+  }
+  
+  # Sets the desired state of the resource.
+  [void] Set () {
+    Import-Module $PSScriptRoot\tools.psm1
+    switch ($this.Version -eq $null) {
+      $true {
+        Module -Ensure $this.Ensure -Action Set -ProviderName $this.ProviderName -Name $this.Name
+      }
+      $false {
+        Module -Ensure $this.Ensure -Action Set -ProviderName $this.ProviderName -Version $this.Version -Name $this.Name
+      }
+    }
+  }
+}
+
+[DscResource()]
+class cPackage {
+  #Declare Properties
+  [DscProperty(Mandatory)]
+  [ensures] $Ensure
+  [DscProperty(Key)]
+  [string] $Name
+  [DscProperty()]
+  [string] $Version
+  [DscProperty(Mandatory)]
+  [string] $ProviderName
+  
+  # Gets the resource's current state.
+  [cPackage] Get () {
+    return $this
+  }
+  
+  # Tests if the resource is in the desired state.
+  [bool] Test () {
+    Import-Module $PSScriptRoot\tools.psm1
+    return (Package -Ensure $this.ensure -Action Test -Name $this.Name)
+  }
+  
+  # Sets the desired state of the resource.
+  [void] Set () {
+    Import-Module $PSScriptRoot\tools.psm1
+    switch ($this.Version -eq $null) {
+      $true {
+        Package -Ensure $this.Ensure -Action Set -ProviderName $this.ProviderName -Name $this.Name
+      }
+      $false {
+        Package -Ensure $this.Ensure -Action Set -ProviderName $this.ProviderName -Version $this.Version -Name $this.Name
+      }
+    }
+  }
+}
+
 [DSCResource()]
 class cPackageRepo {
   #Declare Properties
-  [DscProperty(Key)] 
+  [DscProperty(Mandatory)] 
   [ensures]$Ensure
   [DscProperty(Mandatory)]
   [string]$Name
-  [DscProperty(Mandatory)]
+  [DscProperty(Key)]
   [string]$ProviderName
   [DscProperty(Mandatory)]
   [string]$SourceUri
@@ -51,9 +125,9 @@ class cPackageRepo {
 [DSCResource()]
 class cPSRepo {
   #Declare Properties
-  [DscProperty(Key)] 
+  [DscProperty(Mandatory)] 
   [ensures]$Ensure
-  [DscProperty(Mandatory)]
+  [DscProperty(Key)]
   [string]$Name
   [DscProperty()]
   [string]$PublishUri

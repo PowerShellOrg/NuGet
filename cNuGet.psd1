@@ -12,7 +12,7 @@
 RootModule = 'cNuget.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.6'
+ModuleVersion = '1.3.0'
 
 # ID used to uniquely identify this module
 GUID = 'f8ece87b-543c-4aa1-8082-1de98d06b4a2'
@@ -78,7 +78,13 @@ VariablesToExport = @()
 AliasesToExport = @()
 
 # DSC resources to export from this module
-DscResourcesToExport = @('cNuget','cPSRepo','cPackageRepo')
+DscResourcesToExport = @(
+    'cNuget'
+    'cPSRepo'
+    'cPackageRepo'
+    'cModule'
+    'cPackage'
+  )
 
 # List of all modules packaged with this module
 # ModuleList = @()
@@ -100,6 +106,7 @@ PrivateData = @{
           'Module'
           'DSC'
           'PSGallery'
+          'chocolatey'
         )
 
         # A URL to the license for this module.
