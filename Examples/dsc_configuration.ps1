@@ -70,5 +70,12 @@ configuration default {
       Version = '2.7.4'
       PSDscRunAsCredential = $cred
     }#>
+    cPackage sublime {
+      Ensure = 'Present'
+      Name = 'sublimetext3'
+      ProviderName = 'chocolatey'
+      Version = '3.0.0.3103'
+      PSDscRunAsCredential = $cred
+    }
   }
 }
