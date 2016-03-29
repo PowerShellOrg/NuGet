@@ -16,7 +16,7 @@ enum protocols {
 Import-Module $PSScriptRoot\tools.psm1
 
 [DscResource()]
-class Module {
+class Nuget_Module {
   #Declare Properties
   [DscProperty(Key)]
   [ensures] $Ensure
@@ -28,7 +28,7 @@ class Module {
   [string] $ProviderName
   
   # Gets the resource's current state.
-  [Module] Get () {
+  [Nuget_Module] Get () {
     return $this
   }
   
@@ -53,7 +53,7 @@ class Module {
 }
 
 [DscResource()]
-class Package {
+class Nuget_Package {
   #Declare Properties
   [DscProperty(Mandatory)]
   [ensures] $Ensure
@@ -65,7 +65,7 @@ class Package {
   [string] $ProviderName
   
   # Gets the resource's current state.
-  [Package] Get () {
+  [Nuget_Package] Get () {
     return $this
   }
   

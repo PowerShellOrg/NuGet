@@ -9,10 +9,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = 'NuGet.psm1'
+RootModule = 'Nuget.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.0'
+ModuleVersion = '1.3.1'
 
 # ID used to uniquely identify this module
 GUID = 'f8ece87b-543c-4aa1-8082-1de98d06b4a2'
@@ -27,7 +27,11 @@ CompanyName = 'PowerShell.org'
 Copyright = '(c) 2015 Jason. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Configure a local Nuget repository for PowerShell modules or other packages'
+Description = @' 
+Create Nuget repos, Register Repos, Manage Modules and Packages with a single DSC Module.  This Module Exports 5 Resources, Nuget, PSRepo, PackageRepo, Nuget_Module, and Nuget_Package 
+Examples show off all the core functionality as well as support Kitchen integration. 
+View the source @ https://github.com/PowerShellOrg/NuGet to raise issues or modify functionality
+'@
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '5.0'
@@ -79,11 +83,11 @@ AliasesToExport = @()
 
 # DSC resources to export from this module
 DscResourcesToExport = @(
-    'NuGet'
+    'Nuget'
     'PSRepo'
     'PackageRepo'
-    'Module'
-    'Package'
+    'Nuget_Module'
+    'Nuget_Package'
   )
 
 # List of all modules packaged with this module

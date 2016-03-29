@@ -56,21 +56,21 @@ configuration default {
       InstallPolicy = 'Trusted'
       PSDscRunAsCredential = $cred
     }
-    Module Steroids {
+    Nuget_Module Steroids {
       Ensure = 'Present'
       Name = 'ISESteroids'
       ProviderName = 'PSGallery'
       Version = '2.3.0.64'
       PSDscRunAsCredential = $cred
     }#>
-    Package git {
+    Nuget_Package git {
       Ensure = 'Present'
       Name = 'git'
       ProviderName = 'chocolatey'
       Version = '2.7.4'
       PSDscRunAsCredential = $cred
     }#>
-    Package sublime {
+    Nuget_Package sublime {
       Ensure = 'Present'
       Name = 'sublimetext3'
       ProviderName = 'chocolatey'
