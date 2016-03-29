@@ -16,7 +16,7 @@ enum protocols {
 Import-Module $PSScriptRoot\tools.psm1
 
 [DscResource()]
-class cModule {
+class Module {
   #Declare Properties
   [DscProperty(Key)]
   [ensures] $Ensure
@@ -28,7 +28,7 @@ class cModule {
   [string] $ProviderName
   
   # Gets the resource's current state.
-  [cModule] Get () {
+  [Module] Get () {
     return $this
   }
   
@@ -53,7 +53,7 @@ class cModule {
 }
 
 [DscResource()]
-class cPackage {
+class Package {
   #Declare Properties
   [DscProperty(Mandatory)]
   [ensures] $Ensure
@@ -65,7 +65,7 @@ class cPackage {
   [string] $ProviderName
   
   # Gets the resource's current state.
-  [cPackage] Get () {
+  [Package] Get () {
     return $this
   }
   
@@ -90,7 +90,7 @@ class cPackage {
 }
 
 [DSCResource()]
-class cPackageRepo {
+class PackageRepo {
   #Declare Properties
   [DscProperty(Mandatory)] 
   [ensures]$Ensure
@@ -104,7 +104,7 @@ class cPackageRepo {
   [policies]$InstallPolicy
   #Define Methods
   #Get Method, gathers data about the system state  
-  [cPackageRepo] Get () { 
+  [PackageRepo] Get () { 
     return $this
   } 
   
@@ -123,7 +123,7 @@ class cPackageRepo {
 }
 
 [DSCResource()]
-class cPSRepo {
+class PSRepo {
   #Declare Properties
   [DscProperty(Mandatory)] 
   [ensures]$Ensure
@@ -137,7 +137,7 @@ class cPSRepo {
   [policies]$InstallPolicy = 'Trusted'
   #Define Methods
   #Get Method, gathers data about the system state  
-  [cPSRepo] Get () { 
+  [PSRepo] Get () { 
     return $this
   } 
   
@@ -156,7 +156,7 @@ class cPSRepo {
 }
 
 [DSCResource()]
-class cNuget {
+class NuGet {
   #Declare Properties
   [DscProperty(Key)] 
   [string]$PackageSource
@@ -174,7 +174,7 @@ class cNuget {
   [Boolean]$AllowPackageOverwrite
   #Define Methods
   #Get Method, gathers data about the system state  
-  [cNuget] Get () { 
+  [NuGet] Get () { 
     return $this
   } 
   

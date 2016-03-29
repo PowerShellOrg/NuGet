@@ -13,10 +13,10 @@ configuration default {
   param (
     $ComputerName = 'localhost'
   )
-  Import-DscResource -Module cNuget
+  Import-DscResource -Module NuGet
   
   node $ComputerName {
-    cNuget default {
+    NuGet default {
       PackageSource = "$ENV:SYSTEMDRIVE\Modules"
       Name = 'Modules'
       Port = 81
@@ -24,7 +24,7 @@ configuration default {
       AllowNugetPackagePush = $true
       AllowPackageOverwrite = $true
     }
-    cPSRepo default {
+    PSRepo default {
       Ensure = 'Present'
       Name = 'Modules'
       PublishUri = 'http://localhost:81/'
@@ -32,7 +32,7 @@ configuration default {
       InstallPolicy = 'trusted'
       PSDscRunAsCredential = $cred
     }
-    cNuget packages {
+    NuGet packages {
       PackageSource = "$ENV:SYSTEMDRIVE\Packages"
       Name = 'Packages'
       Port = 82
@@ -40,7 +40,7 @@ configuration default {
       AllowNugetPackagePush = $true
       AllowPackageOverwrite = $true
     }
-    cPackageRepo default {
+    PackageRepo default {
       Ensure = 'Present'
       Name = 'Packages'
       ProviderName = 'Nuget'
@@ -48,7 +48,7 @@ configuration default {
       InstallPolicy = 'Trusted'
       PSDscRunAsCredential = $cred
     }
-    cPackageRepo choco {
+    PackageRepo choco {
       Ensure = 'Present'
       Name = 'chocolatey'
       ProviderName = 'chocolatey'
@@ -56,21 +56,21 @@ configuration default {
       InstallPolicy = 'Trusted'
       PSDscRunAsCredential = $cred
     }
-    cModule Steroids {
+    Module Steroids {
       Ensure = 'Present'
       Name = 'ISESteroids'
       ProviderName = 'PSGallery'
       Version = '2.3.0.64'
       PSDscRunAsCredential = $cred
     }#>
-    cPackage git {
+    Package git {
       Ensure = 'Present'
       Name = 'git'
       ProviderName = 'chocolatey'
       Version = '2.7.4'
       PSDscRunAsCredential = $cred
     }#>
-    cPackage sublime {
+    Package sublime {
       Ensure = 'Present'
       Name = 'sublimetext3'
       ProviderName = 'chocolatey'

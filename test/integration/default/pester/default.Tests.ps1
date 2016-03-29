@@ -14,7 +14,7 @@ class site {
 }
 $sites = [site]::new('modules',81,'c:\Modules'),[site]::new('packages',82,'c:\packages')
 
-describe "Testing the default configuration of cNuget" {
+describe "Testing the default configuration of NuGet" {
     context "Nuget website | napmSources | W3SVC" {
         
         it "ensures IIS installed" {
