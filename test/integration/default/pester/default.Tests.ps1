@@ -24,10 +24,10 @@ describe "Testing the default configuration of NuGet" {
           it "checks for Modules website" {
             get-website -name $site.Name | should not be $null
           }
-          it "ensures bits directory exists" {
+          it "ensures $($site.path) directory exists" {
             test-path $site.Path -type container | should be true
           }
-          it "tets for contents" {
+          it "tests for contents" {
             (invoke-webrequest -uri "http://localhost:$($site.Port)" -usebasicparsing).StatusCode | should be 200
           }
         }

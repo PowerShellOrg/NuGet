@@ -4,6 +4,7 @@ driver:
 
 transport:
   name: winrm
+  winrm_transport: plaintext
 
 provisioner:
   name: dsc
