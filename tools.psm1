@@ -33,7 +33,11 @@ function Module {
     Set {
       switch ($Ensure) {
         Present {
-          Find-Module -Repository $ProviderName -Name $Name -RequiredVersion $Version | Install-Module -Force -Scope AllUsers
+          if ($Version) {
+            Find-Module -Repository $ProviderName -Name $Name -RequiredVersion $Version | Install-Module -Force -Scope AllUsers
+          } else {
+            Find-Module -Repository $ProviderName -Name $Name | Install-Module -Force -Scope AllUsers
+          }
         }
         Absent {
           Uninstall-Module -Name $Name -Force
