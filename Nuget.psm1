@@ -18,9 +18,9 @@ Import-Module $PSScriptRoot\tools.psm1
 [DscResource()]
 class Nuget_Module {
   #Declare Properties
-  [DscProperty(Key)]
-  [ensures] $Ensure
   [DscProperty(Mandatory)]
+  [ensures] $Ensure
+  [DscProperty(Key)]
   [string] $Name
   [DscProperty()]
   [string] $Version
